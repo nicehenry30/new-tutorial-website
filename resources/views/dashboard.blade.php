@@ -8,6 +8,10 @@
             <div class="bg-red-200 text-red-800 p-3 mb-4 rounded">
                 {{ session('error') }}
             </div>
+        @elseif (session('success'))
+            <div class="bg-green-200 text-green-800 p-3 mb-4 rounded">
+                {{ session('success') }}
+            </div>
         @endif
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

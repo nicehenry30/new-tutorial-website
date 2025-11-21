@@ -1,38 +1,131 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en" x-data="dashboard()">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs" defer></script>
+</head>
+<body class="bg-gray-100">
 
-@section('content')
-    <div class="container mx-auto px-4 py-6">
-        <h1 class="text-2xl font-bold mb-4">Admin Dashboard - Upload Tutorial</h1>
+  <!-- Sidebar + Main Container -->
+  <div class="flex min-h-screen">
 
-        @if (session('success'))
-            <div class="bg-green-200 text-green-800 p-3 mb-4 rounded">
-                {{ session('success') }}
-            </div>
-        @endif
+    <!-- Sidebar -->
+    <x-admin.sidebar />
 
-        <form action="{{ route('admin.tutorial.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-            @csrf
-            <div>
-                <label for="title" class="block font-semibold">Title</label>
-                <input type="text" name="title" id="title" class="border p-2 w-full" required>
-            </div>
-
-            <div>
-                <label for="description" class="block font-semibold">Description</label>
-                <textarea name="description" id="description" class="border p-2 w-full"></textarea>
-            </div>
-
-            <div>
-                <label for="video" class="block font-semibold">Video (mp4/avi/mov)</label>
-                <input type="file" name="video" id="video" accept="video/*" class="border p-2 w-full">
-            </div>
-
-            <div>
-                <label for="file" class="block font-semibold">File (pdf/zip/docx)</label>
-                <input type="file" name="file" id="file" accept=".pdf,.zip,.docx" class="border p-2 w-full">
-            </div>
-
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Upload Tutorial</button>
-        </form>
+    <!-- Mobile Nav Icon -->
+    <div class="md:hidden fixed top-4 left-4 z-50">
+      <button @click="mobileNav = !mobileNav" class="text-2xl bg-white p-2 rounded shadow">☰</button>
     </div>
-@endsection
+
+    <!-- Mobile Nav Links -->
+    <x-admin.nav-links />
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+
+      <!-- Top Bar -->
+      <header class="flex justify-between items-center mb-6 pt-16 md:pt-0">
+        <h1 class="text-2xl font-semibold">Dashboard Overview</h1>
+        <div class="flex items-center space-x-4">
+          <button class="p-2 bg-white border rounded-full shadow"><span>🔔</span></button>
+          <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <x-dropdown align="right" width="48">
+                    <x-slot name="trigger">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                            <div>{{ Auth::user()->name }}</div>
+
+                            <div class="ms-1">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </button>
+                    </x-slot>
+
+                    <x-slot name="content">
+                        <x-dropdown-link :href="route('profile.edit')">
+                            {{ __('Profile') }}
+                        </x-dropdown-link>
+
+                        <!-- Authentication -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                            </x-dropdown-link>
+                        </form>
+                    </x-slot>
+                </x-dropdown>
+          </div>
+        </div>
+      </header>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-4 shadow rounded">
+          <p class="text-gray-500">Total Users</p>
+          <h2 class="text-2xl font-bold mt-1">1,284</h2>
+        </div>
+        <div class="bg-white p-4 shadow rounded">
+          <p class="text-gray-500">Active Subscriptions</p>
+          <h2 class="text-2xl font-bold mt-1">876</h2>
+        </div>
+        <div class="bg-white p-4 shadow rounded">
+          <p class="text-gray-500">Revenue</p>
+          <h2 class="text-2xl font-bold mt-1">$12,940</h2>
+        </div>
+        <div class="bg-white p-4 shadow rounded">
+          <p class="text-gray-500">Tickets</p>
+          <h2 class="text-2xl font-bold mt-1">32</h2>
+        </div>
+      </div>
+
+      <!-- Recent Activity Table -->
+      <div class="bg-white shadow rounded p-6">
+        <h3 class="text-lg font-semibold mb-4">Recent Activities</h3>
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b">
+              <th class="py-2">User</th>
+              <th class="py-2">Action</th>
+              <th class="py-2">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="py-2">John Doe</td>
+              <td class="py-2">Updated Profile</td>
+              <td class="py-2">2 hours ago</td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-2">Sarah Smith</td>
+              <td class="py-2">Made Payment</td>
+              <td class="py-2">5 hours ago</td>
+            </tr>
+            <tr>
+              <td class="py-2">Michael Lee</td>
+              <td class="py-2">Created Ticket</td>
+              <td class="py-2">1 day ago</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    function dashboard(){
+      return { mobileNav: false };
+    }
+  </script>
+
+</body>
+</html>

@@ -17,8 +17,8 @@ class AdminMiddleware
     {
         if (auth()->user() && auth()->user()->role === 'admin') {
     return $next($request);
-}
-return redirect('/dashboard')->with('error', 'Access denied.');
+    }
 
+    return redirect('/')->with('error', 'Access denied.');
     }
 }
