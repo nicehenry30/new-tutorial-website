@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->decimal('price', 8, 2);
+            $table->decimal('monthly_price', 8, 2);
+            $table->decimal('yearly_price', 8, 2);
+            $table->string('demo_link')->nullable();
             $table->timestamps();
         });
     }

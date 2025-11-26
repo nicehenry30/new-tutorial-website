@@ -267,22 +267,80 @@
           <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded">Log in</button>
           <button type="button" @click="ui.signinOpen=false" class="px-4 py-2 border rounded">Cancel</button>
         </div>
+        <p class="mt-4">Not a user? <a class="text-indigo" href="{{ route('register') }}">Register</a></p>
       </form>
     </div>
   </div>
 
   <!-- Subscribe Drawer -->
-  <div x-show="ui.subscribeOpen" x-transition class="fixed inset-0 flex items-end z-50">
-    <div class="absolute inset-0 bg-black bg-opacity-40" @click="ui.subscribeOpen=false"></div>
-    <div class="bg-white w-full md:max-w-md rounded-t-xl p-6 mx-auto">
-      <h3 class="text-lg font-semibold">Subscribe to <span x-text="ui.subscribingTo?.title"></span></h3>
-      <p class="text-gray-600 text-sm mt-2">Choose a plan to start receiving signals.</p>
-      <div class="mt-4 flex gap-3">
-        <button @click="confirmSubscribe('monthly')" class="px-4 py-2 bg-indigo-600 text-white rounded">Monthly — $29</button>
-        <button @click="confirmSubscribe('yearly')" class="px-4 py-2 border rounded">Yearly — $290</button>
+  <div 
+    x-show="ui.subscribeOpen" 
+    x-transition.opacity 
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div 
+      x-show="ui.subscribeOpen" 
+      x-transition 
+      class="bg-white w-full max-w-md rounded-2xl shadow-xl p-8 relative animate-fade-in"
+    >
+      <!-- Close button -->
+      <button 
+        @click="ui.subscribeOpen=false" 
+        class="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+      >
+        ✕
+      </button>
+
+      <!-- Title -->
+      <h3 class="text-2xl font-bold text-gray-800 text-center">
+        Subscribe to <span class="text-indigo-600" x-text="ui.subscribingTo?.title"></span>
+      </h3>
+      <p class="text-center text-gray-500 mt-2 text-sm">
+        Choose your preferred subscription plan
+      </p>
+
+      <!-- Pricing Options -->
+      <div class="mt-6 space-y-4">
+        
+        <!-- Monthly Plan -->
+        <div 
+          @click="confirmSubscribe('monthly')" 
+          class="border rounded-xl p-4 flex items-center justify-between cursor-pointer hover:border-indigo-600 transition"
+        >
+          <div>
+            <h4 class="font-semibold text-gray-800">Monthly Plan</h4>
+            <p class="text-gray-500 text-sm">Billed every 30 days</p>
+          </div>
+          <span class="text-indigo-600 font-bold text-lg">$29</span>
+        </div>
+
+        <!-- Yearly Plan -->
+        <div 
+          @click="confirmSubscribe('yearly')" 
+          class="border rounded-xl p-4 flex items-center justify-between cursor-pointer hover:border-indigo-600 transition"
+        >
+          <div>
+            <h4 class="font-semibold text-gray-800">Yearly Plan</h4>
+            <p class="text-gray-500 text-sm">Save 20% — best value</p>
+          </div>
+          <span class="text-indigo-600 font-bold text-lg">$290</span>
+        </div>
       </div>
-      <div class="mt-4 text-sm text-gray-500">Payment simulation only (UI demo).</div>
-      <div class="mt-4"><button @click="ui.subscribeOpen=false" class="text-sm text-gray-600">Close</button></div>
+
+      <!-- Info -->
+      <p class="text-center text-xs text-gray-500 mt-6">
+        Payment simulation only (UI demo)
+      </p>
+
+      <!-- Close button bottom -->
+      <div class="mt-4 text-center">
+        <button 
+          @click="ui.subscribeOpen=false" 
+          class="px-4 py-2 text-gray-600 hover:text-gray-800 text-sm"
+        >
+          Close
+        </button>
+      </div>
     </div>
   </div>
 

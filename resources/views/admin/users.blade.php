@@ -34,7 +34,7 @@
 
       <!-- Top Bar -->
       <header class="flex justify-between items-center mb-6 pt-16 md:pt-0">
-        <h1 class="text-2xl font-semibold">Dashboard Overview</h1>
+        <h1 class="text-2xl font-semibold">Users Overview</h1>
         <div class="flex items-center space-x-4">
           <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
@@ -71,49 +71,30 @@
         </div>
       </header>
 
-      <!-- Stats Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white p-4 shadow rounded">
-          <p class="text-gray-500">Total Users</p>
-          <h2 class="text-2xl font-bold mt-1">{{ $users->count() }}</h2>
-        </div>
-        <div class="bg-white p-4 shadow rounded">
-          <p class="text-gray-500">Active Subscriptions</p>
-          <h2 class="text-2xl font-bold mt-1">876</h2>
-        </div>
-        <div class="bg-white p-4 shadow rounded">
-          <p class="text-gray-500">Revenue</p>
-          <h2 class="text-2xl font-bold mt-1">$12,940</h2>
-        </div>
-        <div class="bg-white p-4 shadow rounded">
-          <p class="text-gray-500">Tickets</p>
-          <h2 class="text-2xl font-bold mt-1">32</h2>
-        </div>
-      </div>
 
       <!-- Recent Activity Table -->
       <div class="bg-white shadow rounded p-6">
-        <h3 class="text-lg font-semibold mb-4">Recent Activities</h3>
+        <h3 class="text-lg font-semibold mb-4">All Users</h3>
         <table class="w-full text-left">
           <thead>
             <tr class="border-b">
-              <th class="py-2">User</th>
-              <th class="py-2">Action</th>
-              <th class="py-2">Description</th>
-              <th class="py-2">Date</th>
+              <th class="py-2">Name</th>
+              <th class="py-2">Email</th>
+              <th class="py-2">Phone</th>
+              <th class="py-2">Date Joined</th>
             </tr>
           </thead>
           <tbody>
-            @forelse ($activities as $activity)
+            @forelse ($users as $user)
               <tr class="border-b">
-                <td class="py-2">{{ $activity->user->name }}</td>
-                <td class="py-2">{{ $activity->action }}</td>
-                <td class="py-2">{{ $activity->description }}</td>
-                <td class="py-2">{{ $activity->created_at->format('Y-m-d h:s') }}</td>
+                <td class="py-2">{{ $user->name }}</td>
+                <td class="py-2">{{ $user->email }}</td>
+                <td class="py-2">{{ $user->phone }}</td>
+                <td class="py-2">{{ $user->created_at->format('Y-m-d h:s') }}</td>
               </tr>
             @empty
               <tr>
-                <td colspan="4" class="py-4 text-center text-gray-500">No recent activities found.</td>
+                <td colspan="4" class="py-4 text-center text-gray-500">No user found.</td>
               </tr>
             @endforelse
           </tbody>

@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('signals', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->string('action');
             $table->text('description')->nullable();
-            $table->float('TP')->nullable();
-            $table->float('SL')->nullable();
-            $table->decimal('monthly_price', 8, 2);
-            $table->decimal('yearly_price', 8, 2);
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('signals');
+        Schema::dropIfExists('activities');
     }
 };
