@@ -7,7 +7,7 @@
         <a href="{{ route('admin.products') }}" @click="mobileNav=false" class="block px-4 py-2 rounded hover:bg-gray-200">Products</a>
         <a href="{{ route('admin.subscriptions') }}" @click="mobileNav=false" class="block px-4 py-2 rounded hover:bg-gray-200">Subscriptions</a>
         <a href="{{ route('admin.tickets') }}" @click="mobileNav=false" class="block px-4 py-2 rounded hover:bg-gray-200">Tickets</a>
-        <a href="{{ route('admin.profile') }}" @click="mobileNav=false" class="block px-4 py-2 rounded hover:bg-gray-200">Profile</a>
+        <a href="{{ route('admin.profile.edit') }}" @click="mobileNav=false" class="block px-4 py-2 rounded hover:bg-gray-200">Profile</a>
         <a href="{{ route('admin.settings') }}" @click="mobileNav=false" class="block px-4 py-2 rounded hover:bg-gray-200">Settings</a>
         <a href="{{ route('admin.logout') }}" @click="mobileNav=false" class="block px-4 py-2 rounded hover:bg-gray-200">Logout</a>
     </nav>

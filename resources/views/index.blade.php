@@ -7,9 +7,11 @@
   <script src="https://unpkg.com/alpinejs" defer></script>
   <title>SignalLearn — Forex Signals & Courses</title>
   <style>
-  html { 
-    scroll-behavior: smooth; 
-  }
+    [x-cloak] { display: none !important; }
+  
+    html { 
+      scroll-behavior: smooth; 
+    }
 
     @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
@@ -55,7 +57,7 @@
         <a href="#bots" @click="mobileNav=false; navAnimate($event)" class="py-2">Bots</a>
         <a href="#dashboard" @click="mobileNav=false; navAnimate($event)" class="py-2">Dashboard</a>
         <button @click="mobileNav=false; openSignin()" class="mt-2 px-4 py-2 bg-white-600 text-black rounded">Log in</button>
-        <button @click="mobileNav=false; openSignin()" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded">Get started</button>
+        <button @click="mobileNav=false; openSignup()" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded">Get started</button>
       </div>
     </div>
   </header>
@@ -239,6 +241,8 @@
 
         <input name="email" type="email" placeholder="Email" class="w-full border rounded px-3 py-2 mb-2" />
 
+        <input name="phone" type="text" placeholder="Phone" class="w-full border rounded px-3 py-2 mb-2" />
+
         <input name="password" type="password" placeholder="Password" class="w-full border rounded px-3 py-2 mb-2" />
 
         <input name="password_confirmation" type="password" placeholder="Confirm Password" class="w-full border rounded px-3 py-2 mb-2" />
@@ -392,7 +396,7 @@
       return {
         mobileNav: false,
         signalFilter: 'all',
-        ui: { signupOpen:false, subscribeOpen:false, courseOpen:false, subscribingTo:null, activeCourse:null },
+        ui: { signinOpen:false, signupOpen:false, subscribeOpen:false, courseOpen:false, subscribingTo:null, activeCourse:null },
         form:{ name:'', email:'', password:'' },
         subscriptions: [],
         signals: [

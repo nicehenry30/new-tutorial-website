@@ -8,6 +8,9 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- Alertify CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"/>
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -17,6 +20,25 @@
 </head>
 
 <body class="font-sans antialiased">
+
+    @if (session('success'))
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      alertify.set('notifier','position', 'top-right');
+      alertify.success('{{ session('success') }}');
+    });
+    </script>
+
+    @elseif (session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        alertify.set('notifier','position', 'top-right');
+        alertify.error('{{ session('error') }}');
+        });
+    </script>
+
+    @endif
+
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.navigation')
 
@@ -31,12 +53,13 @@
 
         <!-- Page Content -->
         <main>
-            <main>
-                @yield('content')
-            </main>
-
+            @yield('content')
         </main>
     </div>
+
+
+    <!-- Alertify JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
 </body>
 
 </html>

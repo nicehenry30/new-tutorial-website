@@ -6,6 +6,7 @@
         <a class="block px-4 py-2 rounded hover:bg-gray-200" href="{{ route('admin.products') }}">Products</a>
         <a class="block px-4 py-2 rounded hover:bg-gray-200" href="{{ route('admin.subscriptions') }}">Subscriptions</a>
         <a class="block px-4 py-2 rounded hover:bg-gray-200" href="{{ route('admin.tickets') }}">Tickets</a>
+        <a class="block px-4 py-2 rounded hover:bg-gray-200" href="{{ route('admin.profile.edit') }}">Profile</a>
         <a class="block px-4 py-2 rounded hover:bg-gray-200" href="{{ route('admin.settings')  }}">Settings</a>
         <a class="block px-4 py-2 rounded hover:bg-gray-200" href="{{ route('admin.tickets') }}">Logout</a>
     </nav>

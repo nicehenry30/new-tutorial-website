@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
 
 // Auth routes
 require __DIR__.'/auth.php';
@@ -39,6 +40,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('admin.subscriptions');
     Route::get('/tickets', [TicketController::class, 'index'])->name('admin.tickets');
     Route::get('/profile', [SettingController::class, 'index'])->name('admin.profile');
+
     Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
+    Route::put('/settings/update', [SettingController::class, 'update'])->name('admin.settings.update');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/password', [ProfileController::class, 'update_password'])->name('password.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::get('/logout', [SettingController::class, 'index'])->name('admin.logout');
 });
