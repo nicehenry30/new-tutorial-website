@@ -11,5 +11,7 @@ class Signal extends Model
         'description',
         'TP',
         'SL',
+        'monthly_price',
+        'yearly_price',
     ];
 }

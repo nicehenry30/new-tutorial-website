@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('url')->nullable();
-            $table->text('description')->nullable();
+            $table->string('author')->nullable();
+            $table->text('small_description');
+            $table->longText('description')->nullable();
             $table->string('video_path')->nullable();
             $table->string('file_path')->nullable();
             $table->decimal('price', 8, 2);

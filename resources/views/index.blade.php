@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" x-data="app()">
-<head>
+<head> 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {{-- Favicon --}}
+  <link rel="icon" href="{{ $settings->favicon }}" />
+
+  {{-- Tailwind CSS & Alpine.js --}}
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/alpinejs" defer></script>
-  <title>SignalLearn — Forex Signals & Courses</title>
+  <title>{{ $settings->title }} — Forex Signals & Courses</title>
   <style>
     [x-cloak] { display: none !important; }
   
@@ -29,7 +33,7 @@
   <header class="bg-white shadow sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="text-2xl font-bold text-indigo-600">SignalLearn</div>
+        <div class="text-2xl font-bold text-indigo-600">{{ $settings->title }}</div>
         {{-- <div class="hidden md:flex items-center text-sm text-gray-600">Signals · Courses · Dashboard</div> --}}
       </div>
 
@@ -89,7 +93,26 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <template x-for="signal in filteredSignals()" :key="signal.id">
+      @forelse ($signals as $signal)
+        <div class="bg-white rounded-xl shadow p-5">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="text-sm text-gray-500">{{ $signal->created_at->format('M d, Y H:i') }}</div>
+              <h3 class="text-xl font-semibold">{{ $signal->title }}</h3>
+              <p class="text-gray-600 mt-2">{{ $signal->description }}</p>
+            </div>
+            <div class="text-right">
+              <div class="text-indigo-600 font-bold text-lg">Trade Now</div>
+              <div class="text-sm text-gray-500 mt-1">TP: {{ $signal->TP }}</div>
+              <div class="text-sm text-gray-500">SL: {{ $signal->SL }}</div>
+              <button @click="openSignin()" class="mt-3 px-3 py-1 border rounded text-sm">Subscribe</button>
+            </div>
+          </div>
+        </div>
+      @empty
+        <p class="text-gray-600">No signals available at the moment. Please check back later.</p>
+      @endforelse
+      {{-- <template x-for="signal in filteredSignals()" :key="signal.id">
         <div class="bg-white rounded-xl shadow p-5">
           <div class="flex justify-between items-start">
             <div>
@@ -105,7 +128,7 @@
             </div>
           </div>
         </div>
-      </template>
+      </template> --}}
     </div>
   </section>
 
@@ -118,7 +141,26 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <template x-for="course in courses" :key="course.id">
+        @forelse ($courses as $course)
+          <div class="bg-white rounded-xl shadow overflow-hidden">
+            <img src="{{ asset('images/' . $course->image_path) }}" class="w-full h-40 object-cover" alt="Course Image" />
+            <div class="p-4">
+              <h3 class="font-semibold text-lg">{{ $course->title }}</h3>
+              <p class="text-gray-600 mt-2 text-sm">{{ $course->small_description }}</p>
+              <div class="mt-4 flex items-center justify-between">
+                <div class="text-indigo-600 font-bold">${{ number_format($course->price, 2) }}</div>
+                <div class="flex gap-2">
+                  <button @click="openCourse({{ json_encode($course) }})" class="px-3 py-1 bg-indigo-600 text-white rounded text-sm">View</button>
+                  <button @click="openSignin();" class="px-3 py-1 border rounded text-sm">Enroll</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        @empty
+          <p class="text-gray-600">No courses available at the moment. Please check back later.</p>
+        @endforelse
+        {{-- <template x-for="course in courses" :key="course.id">
           <div class="bg-white rounded-xl shadow overflow-hidden">
             <img :src="course.image" class="w-full h-40 object-cover" />
             <div class="p-4">
@@ -133,7 +175,7 @@
               </div>
             </div>
           </div>
-        </template>
+        </template> --}}
       </div>
     </div>
   </section>
@@ -142,7 +184,19 @@
   <section id="bots" class="max-w-7xl mx-auto px-6 py-16">
     <h2 class="text-2xl font-bold mb-6">Trading Bots</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white p-6 rounded-xl shadow">
+      @forelse ($bots as $bot)
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="font-semibold text-xl">{{ $bot->title }}</h3>
+          <p class="text-gray-600 mt-2">{{ $bot->description }}</p>
+          <div class="mt-4 flex gap-3">
+            <button @click="openSignin()" class="px-4 py-2 bg-indigo-600 text-white rounded">Subscribe</button>
+            <a :href="'{{ $bot->demo_link }}'" target="_blank" class="px-4 py-2 border rounded">Demo</a>
+          </div>
+        </div> 
+      @empty
+        <p class="text-gray-600">No trading bots available at the moment. Please check back later.</p>
+      @endforelse
+      {{-- <div class="bg-white p-6 rounded-xl shadow">
         <h3 class="font-semibold text-xl">Crypto Trading Bot</h3>
         <p class="text-gray-600 mt-2">AI-driven strategies for crypto markets — subscription based.</p>
         <div class="mt-4 flex gap-3">
@@ -157,7 +211,7 @@
           <button @click="openSignin()" class="px-4 py-2 bg-indigo-600 text-white rounded">Subscribe</button>
           <button @click="demoBot('forex')" class="px-4 py-2 border rounded">Demo</button>
         </div>
-      </div>
+      </div> --}}
     </div>
   </section>
 
@@ -224,7 +278,7 @@
 
   <!-- FOOTER -->
   <footer class="bg-gray-900 text-gray-300 py-8">
-    <div class="max-w-7xl mx-auto px-6 text-center text-sm">© 2025 SignalLearn — All rights reserved.</div>
+    <div class="max-w-7xl mx-auto px-6 text-center text-sm">© {{date('Y').' '. $settings->title }} — All rights reserved.</div>
   </footer>
 
 

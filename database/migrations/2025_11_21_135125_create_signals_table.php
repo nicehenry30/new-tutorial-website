@@ -17,8 +17,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->float('TP')->nullable();
             $table->float('SL')->nullable();
-            $table->decimal('monthly_price', 8, 2);
-            $table->decimal('yearly_price', 8, 2);
+            $table->decimal('monthly_price', 8, 5);
+            $table->decimal('yearly_price', 8, 5);
             $table->timestamps();
         });
     }

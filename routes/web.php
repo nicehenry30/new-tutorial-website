@@ -11,7 +11,12 @@ use App\Http\Controllers\SettingController;
 require __DIR__.'/auth.php';
 
 Route::get('/', function () {
-    return view('index');
+    $settings = App\Models\Setting::first();
+    $courses = App\Models\Course::all();
+    $bots = App\Models\Bot::all();
+    $signals = App\Models\Signal::all();
+
+    return view('index')->with(compact('settings', 'courses', 'bots', 'signals'));
 })->name('index');
 
 // User routes
@@ -30,11 +35,27 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
 
     Route::get('/products', [ProductController::class, 'index'])->name('admin.products');
-    Route::get('/bots/create', [ProductController::class, 'create'])->name('admin.bots.create');
-    Route::post('/bots/store', [ProductController::class, 'store'])->name('admin.bots.store');
-    Route::get('/bots/{id}/edit', [ProductController::class, 'edit'])->name('admin.bots.edit');
-    Route::put('/bots/{id}/update', [ProductController::class, 'update'])->name('admin.bots.update');
-    Route::delete('/bots/{id}/delete', [ProductController::class, 'destroy'])->name('admin.bots.delete');
+
+    // Products - Bots
+    Route::get('/bots/create', [ProductController::class, 'create_bot'])->name('admin.bots.create');
+    Route::post('/bots/store', [ProductController::class, 'store_bot'])->name('admin.bots.store');
+    Route::get('/bots/{id}/edit', [ProductController::class, 'edit_bot'])->name('admin.bots.edit');
+    Route::put('/bots/{id}/update', [ProductController::class, 'update_bot'])->name('admin.bots.update');
+    Route::delete('/bots/{id}/delete', [ProductController::class, 'destroy_bot'])->name('admin.bots.delete');
+
+    // Products - Courses
+    Route::get('/courses/create', [ProductController::class, 'create_course'])->name('admin.courses.create');
+    Route::post('/courses/store', [ProductController::class, 'store_course'])->name('admin.courses.store');
+    Route::get('/courses/{id}/edit', [ProductController::class, 'edit_course'])->name('admin.courses.edit');
+    Route::put('/courses/{id}/update', [ProductController::class, 'update_course'])->name('admin.courses.update');
+    Route::delete('/courses/{id}/delete', [ProductController::class, 'destroy_course'])->name('admin.courses.delete');
+
+        // Products - Signals
+    Route::get('/signals/create', [ProductController::class, 'create_signal'])->name('admin.signals.create');
+    Route::post('/signals/store', [ProductController::class, 'store_signal'])->name('admin.signals.store');
+    Route::get('/signals/{id}/edit', [ProductController::class, 'edit_signal'])->name('admin.signals.edit');
+    Route::put('/signals/{id}/update', [ProductController::class, 'update_signal'])->name('admin.signals.update');
+    Route::delete('/signals/{id}/delete', [ProductController::class, 'destroy_signal'])->name('admin.signals.delete');
 
 
     Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('admin.subscriptions');

@@ -9,10 +9,12 @@ class UserController extends Controller
     // Show user dashboard with tutorials
     public function index()
     {
-        // Optionally, you can filter based on subscription
-        $tutorials = Tutorial::latest()->get();
+        $settings = Setting::first();
+        $courses = Course::all();
+        $bots = Bot::all();
+        $signals = Signal::all();
 
-        return view('dashboard', compact('tutorials'));
+        return view('dashboard', compact('settings', 'courses', 'bots', 'signals'));
     }
 
     // Show a single tutorial

@@ -114,7 +114,10 @@
     x-transition:leave-end="opacity-0 transform -translate-y-2"
   >
     <div class="bg-white shadow rounded p-6">
-      <h3 class="text-lg font-semibold mb-4">All Courses</h3>
+      <div class="text-lg font-semibold mb-4 flex justify-between items-center">
+        <span>All Courses</span>
+        <a href="{{ route('admin.courses.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Add Course</a>
+      </div>
       <table class="w-full text-left">
         <thead>
           <tr class="border-b">
@@ -122,8 +125,6 @@
             <th class="py-2">Title</th>
             <th class="py-2">Description</th>
             <th class="py-2">URL</th>
-            <th class="py-2">Intro Video</th>
-            <th class="py-2">Intro File</th>
             <th class="py-2">Price</th>
             <th class="py-2">Actions</th>
           </tr>
@@ -132,8 +133,8 @@
             @forelse ($courses as $course)
               <tr class="border-b">
                 <td class="py-2">
-                  @if($course->image_url)
-                    <img src="{{ $course->image_url }}" alt="{{ $course->title }}" class="h-16 w-16 object-cover rounded">
+                  @if($course->image_path)
+                    <img src="{{asset('images/'.$course->image_path) }}" alt="{{ $course->title }}" class="h-16 w-16 object-cover rounded">
                   @else
                     N/A
                   @endif
@@ -141,20 +142,6 @@
                 <td class="py-2">{{ $course->title }}</td>
                 <td class="py-2">{{ $course->description }}</td>
                 <td class="py-2"><a href="{{ $course->url }}" class="text-blue-500 underline" target="_blank">Link</a></td>
-                <td class="py-2">
-                  @if($course->intro_video_url)
-                    <a href="{{ $course->intro_video_url }}" class="text-blue-500 underline" target="_blank">Video</a>
-                  @else
-                    N/A
-                  @endif
-                </td>
-                <td class="py-2">
-                  @if($course->intro_file_url)
-                    <a href="{{ $course->intro_file_url }}" class="text-blue-500 underline" target="_blank">File</a>
-                  @else
-                    N/A
-                  @endif
-                </td>
                 <td class="py-2">${{ $course->price }}</td>
                 <td class="py-2">
                   <a href="{{ route('admin.courses.edit', $course->id) }}" class="text-indigo-600 hover:underline mr-4">Edit</a>
@@ -189,7 +176,10 @@
     class="mt-4"
   >
     <div class="bg-white shadow rounded p-6">
-      <h3 class="text-lg font-semibold mb-4">All signals</h3>
+      <div class="text-lg font-semibold mb-4 flex justify-between items-center">
+        <span>All Signals</span>
+        <a href="{{ route('admin.signals.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Add Signal</a>
+      </div>
       <table class="w-full text-left">
         <thead>
           <tr class="border-b">
@@ -207,10 +197,10 @@
               <tr>
                 <td class="py-2">{{ $signal->title }}</td>
                 <td class="py-2">{{ $signal->description }}</td>
-                <td class="py-2">{{ $signal->tp }}</td>
-                <td class="py-2">{{ $signal->sl }}</td>
-                <td class="py-2">${{ $signal->monthly_price }}</td>
-                <td class="py-2">${{ $signal->yearly_price }}</td>
+                <td class="py-2">{{ $signal->TP }}</td>
+                <td class="py-2">{{ $signal->SL }}</td>
+                <td class="py-2">{{ $settings->currency.''. $signal->monthly_price }}</td>
+                <td class="py-2">{{ $settings->currency.''.$signal->yearly_price }}</td>
                 <td class="py-2">
                   <a href="{{ route('admin.signals.edit', $signal->id) }}" class="text-indigo-600 hover:underline mr-4">Edit</a>
                   <form action="{{ route('admin.signals.delete', $signal->id) }}" method="POST" class="inline">
@@ -244,7 +234,10 @@
     class="mt-4"
   >
     <div class="bg-white shadow rounded p-6">
-      <h3 class="text-lg font-semibold mb-4">All Bots</h3>
+      <div class="text-lg font-semibold mb-4 flex justify-between items-center">
+        <span>All Bots</span>
+        <a href="{{ route('admin.bots.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Add Bot</a>
+      </div>
       <table class="w-full text-left">
         <thead>
           <tr class="border-b">
