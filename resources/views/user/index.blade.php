@@ -6,6 +6,9 @@
   {{-- Favicon --}}
   <link rel="icon" href="{{ $settings->favicon }}" />
 
+  <!-- Alertify CSS -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"/>
+
   {{-- Tailwind CSS & Alpine.js --}}
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/alpinejs" defer></script>
@@ -28,6 +31,24 @@
 
 </head>
 <body class="font-inter antialiased bg-gray-50 text-gray-800">
+
+    @if (session('success'))
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      alertify.set('notifier','position', 'top-right');
+      alertify.success('{{ session('success') }}');
+    });
+    </script>
+
+    @elseif (session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        alertify.set('notifier','position', 'top-right');
+        alertify.error('{{ session('error') }}');
+        });
+    </script>
+
+    @endif
 
   <!-- NAVBAR -->
   <header class="bg-white shadow sticky top-0 z-50">
@@ -67,8 +88,15 @@
           <a href="{{ route('user.dashboard') }}" @click="mobileNav=false; navAnimate($event)" class="py-2">Dashboard</a>
         @endauth
 
-        <button @click="mobileNav=false; openSignin()" class="mt-2 px-4 py-2 bg-white-600 text-black rounded">Log in</button>
-        <button @click="mobileNav=false; openSignup()" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded">Get started</button>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+
+            <x-dropdown-link :href="route('logout')"
+                    onclick="event.preventDefault();
+                                this.closest('form').submit();">
+                {{ __('Log Out') }}
+            </x-dropdown-link>
+        </form>
       </div>
     </div>
   </header>
@@ -95,7 +123,6 @@
           <option value="fx">Forex</option>
           <option value="crypto">Crypto</option>
         </select> --}}
-        <button @click="openSignin()" class="px-3 py-2 bg-indigo-600 text-white rounded">Subscribe</button>
       </div>
     </div>
 
@@ -112,7 +139,7 @@
               <div class="text-indigo-600 font-bold text-lg">Trade Now</div>
               <div class="text-sm text-gray-500 mt-1">TP: {{ $signal->TP }}</div>
               <div class="text-sm text-gray-500">SL: {{ $signal->SL }}</div>
-              <button @click="openSignin()" class="mt-3 px-3 py-1 border rounded text-sm">Subscribe</button>
+              <button class="mt-3 px-3 py-1 border rounded text-sm">Subscribe</button>
             </div>
           </div>
         </div>
@@ -149,6 +176,15 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($courses as $course)
+        <form action="{{ route('pay') }}" method="POST">
+          @csrf
+
+          <input type="hidden"  name="email"  value="{{ Auth::user()->email }}">
+
+          <input type="hidden" name="amount" value="{{ $course->price }}">
+
+          <input type="hidden" name="product_id" value="{{ $course->id }}">
+
           <div class="bg-white rounded-xl shadow overflow-hidden">
             <img src="{{ asset('images/' . $course->image_path) }}" class="w-full h-40 object-cover" alt="Course Image" />
             <div class="p-4">
@@ -158,11 +194,12 @@
                 <div class="text-indigo-600 font-bold">{{ number_format($course->price, 0) .' '. $settings->currency}}</div>
                 <div class="flex gap-2">
                   <button @click="openCourse({{ json_encode($course) }})" class="px-3 py-1 bg-indigo-600 text-white rounded text-sm">View</button>
-                  <button @click="openSignin();" class="px-3 py-1 border rounded text-sm">Enroll</button>
+                  <button type="submit" class="px-3 py-1 border rounded text-sm">Enroll</button>
                 </div>
               </div>
             </div>
           </div>
+          </form>
           
         @empty
           <p class="text-gray-600">No courses available at the moment. Please check back later.</p>
@@ -421,11 +458,10 @@
 
       <div class="mt-4 grid md:grid-cols-3 gap-6">
         <div class="md:col-span-2">
-          <p class="mt-4 text-gray-700" x-text="ui.activeCourse?.long"></p>
           <div class="mt-4">
             <h4 class="font-semibold">Description</h4>
             <ul class="mt-2 space-y-2">
-              <li class="flex items-center justify-between bg-gray-50 p-3 rounded">
+                <li class="flex items-center justify-between bg-gray-50 p-3 rounded">
                   <div>
                     <div class="font-medium" x-text="ui.activeCourse?.description"></div>
                   </div>
@@ -442,7 +478,10 @@
       </div>
     </div>
   </div>
-  
+
+  <!-- Alertify JavaScript -->
+  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+
   <script>
     function app(){
       return {

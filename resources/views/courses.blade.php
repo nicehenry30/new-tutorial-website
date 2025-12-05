@@ -73,71 +73,6 @@
     </div>
   </header>
 
-  <!-- HERO -->
-  <section id="hero" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-28">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <h1 class="text-4xl md:text-5xl font-extrabold">Forex Signals + Trading Courses — in one place</h1>
-      <p class="mt-4 text-lg opacity-90">Subscribe to signal providers, follow trading strategies, and learn with hands-on courses.</p>
-      <div class="mt-6 flex justify-center gap-4">
-        <button @click="scrollTo('#signals');" class="px-6 py-3 bg-white text-indigo-700 rounded-lg font-semibold">Browse Signals</button>
-        <button @click="scrollTo('#courses');" class="px-6 py-3 bg-indigo-700 text-white rounded-lg font-semibold">Browse Courses</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- SIGNALS FEED -->
-  <section id="signals" class="max-w-7xl mx-auto px-6 py-16">
-    <div class="flex items-center justify-between mb-8">
-      <h2 class="text-2xl font-bold">Live Signals</h2>
-      <div class="flex gap-3 items-center">
-        {{-- <select x-model="signalFilter" class="border rounded px-3 py-2 text-sm">
-          <option value="all">All Pairs</option>
-          <option value="fx">Forex</option>
-          <option value="crypto">Crypto</option>
-        </select> --}}
-        <button @click="openSignin()" class="px-3 py-2 bg-indigo-600 text-white rounded">Subscribe</button>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      @forelse ($signals as $signal)
-        <div class="bg-white rounded-xl shadow p-5">
-          <div class="flex justify-between items-start">
-            <div>
-              <div class="text-sm text-gray-500">{{ $signal->created_at->format('M d, Y H:i') }}</div>
-              <h3 class="text-xl font-semibold">{{ $signal->title }}</h3>
-              <p class="text-gray-600 mt-2">{{ $signal->description }}</p>
-            </div>
-            <div class="text-right">
-              <div class="text-indigo-600 font-bold text-lg">Trade Now</div>
-              <div class="text-sm text-gray-500 mt-1">TP: {{ $signal->TP }}</div>
-              <div class="text-sm text-gray-500">SL: {{ $signal->SL }}</div>
-              <button @click="openSignin()" class="mt-3 px-3 py-1 border rounded text-sm">Subscribe</button>
-            </div>
-          </div>
-        </div>
-      @empty
-        <p class="text-gray-600">No signals available at the moment. Please check back later.</p>
-      @endforelse
-      {{-- <template x-for="signal in filteredSignals()" :key="signal.id">
-        <div class="bg-white rounded-xl shadow p-5">
-          <div class="flex justify-between items-start">
-            <div>
-              <div class="text-sm text-gray-500" x-text="signal.time"></div>
-              <h3 class="text-xl font-semibold" x-text="signal.title"></h3>
-              <p class="text-gray-600 mt-2" x-text="signal.note"></p>
-            </div>
-            <div class="text-right">
-              <div class="text-indigo-600 font-bold text-lg" x-text="signal.action"></div>
-              <div class="text-sm text-gray-500 mt-1">TP: <span x-text="signal.tp"></span></div>
-              <div class="text-sm text-gray-500">SL: <span x-text="signal.sl"></span></div>
-              <button @click="openSubscribe(signal)" class="mt-3 px-3 py-1 border rounded text-sm">Subscribe</button>
-            </div>
-          </div>
-        </div>
-      </template> --}}
-    </div>
-  </section>
 
   <!-- COURSES -->
   <section id="courses" class="bg-gray-50 py-16">
@@ -184,41 +119,6 @@
           </div>
         </template> --}}
       </div>
-    </div>
-  </section>
-
-  <!-- TRADING BOTS -->
-  <section id="bots" class="max-w-7xl mx-auto px-6 py-16">
-    <h2 class="text-2xl font-bold mb-6">Trading Bots</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      @forelse ($bots as $bot)
-        <div class="bg-white p-6 rounded-xl shadow">
-          <h3 class="font-semibold text-xl">{{ $bot->title }}</h3>
-          <p class="text-gray-600 mt-2">{{ $bot->description }}</p>
-          <div class="mt-4 flex gap-3">
-            <button @click="openSignin()" class="px-4 py-2 bg-indigo-600 text-white rounded">Subscribe</button>
-            <a :href="'{{ $bot->demo_link }}'" target="_blank" class="px-4 py-2 border rounded">Demo</a>
-          </div>
-        </div> 
-      @empty
-        <p class="text-gray-600">No trading bots available at the moment. Please check back later.</p>
-      @endforelse
-      {{-- <div class="bg-white p-6 rounded-xl shadow">
-        <h3 class="font-semibold text-xl">Crypto Trading Bot</h3>
-        <p class="text-gray-600 mt-2">AI-driven strategies for crypto markets — subscription based.</p>
-        <div class="mt-4 flex gap-3">
-          <button @click="openSignin()" class="px-4 py-2 bg-indigo-600 text-white rounded">Subscribe</button>
-          <button @click="demoBot('crypto')" class="px-4 py-2 border rounded">Demo</button>
-        </div>
-      </div>
-      <div class="bg-white p-6 rounded-xl shadow">
-        <h3 class="font-semibold text-xl">Forex Trading Bot</h3>
-        <p class="text-gray-600 mt-2">Precision scalping & swing strategies tuned for FX pairs.</p>
-        <div class="mt-4 flex gap-3">
-          <button @click="openSignin()" class="px-4 py-2 bg-indigo-600 text-white rounded">Subscribe</button>
-          <button @click="demoBot('forex')" class="px-4 py-2 border rounded">Demo</button>
-        </div>
-      </div> --}}
     </div>
   </section>
 
@@ -421,15 +321,22 @@
 
       <div class="mt-4 grid md:grid-cols-3 gap-6">
         <div class="md:col-span-2">
+          <img :src="ui.activeCourse?.image" class="w-full h-48 object-cover rounded" />
           <p class="mt-4 text-gray-700" x-text="ui.activeCourse?.long"></p>
           <div class="mt-4">
-            <h4 class="font-semibold">Description</h4>
+            <h4 class="font-semibold">Lessons</h4>
             <ul class="mt-2 space-y-2">
-              <li class="flex items-center justify-between bg-gray-50 p-3 rounded">
+              <template x-for="lesson in ui.activeCourse?.lessons" :key="lesson.id">
+                <li class="flex items-center justify-between bg-gray-50 p-3 rounded">
                   <div>
-                    <div class="font-medium" x-text="ui.activeCourse?.description"></div>
+                    <div class="font-medium" x-text="lesson.title"></div>
+                    <div class="text-xs text-gray-500" x-text="lesson.duration"></div>
+                  </div>
+                  <div>
+                    <button @click="playLesson(lesson)" class="px-3 py-1 border rounded text-sm">Play</button>
                   </div>
                 </li>
+              </template>
             </ul>
           </div>
         </div>
@@ -437,12 +344,13 @@
           <div class="bg-gray-50 p-4 rounded">
             <div class="text-sm text-gray-600">Price</div>
             <div class="text-xl font-bold mt-1" x-text="ui.activeCourse?.price"></div>
+            <button @click="openSignin()" class="mt-4 w-full px-3 py-2 bg-indigo-600 text-white rounded">Enroll</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+
   <script>
     function app(){
       return {

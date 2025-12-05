@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\CheckoutController;
 
 // Auth routes
 require __DIR__.'/auth.php';
@@ -19,10 +20,22 @@ Route::get('/', function () {
     return view('index')->with(compact('settings', 'courses', 'bots', 'signals'));
 })->name('index');
 
+Route::get('/courses', function () {
+    $settings = App\Models\Setting::first();
+    $courses = App\Models\Course::all();
+
+    return view('courses')->with(compact('settings', 'courses'));
+})->name('courses');
+
 // User routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
-    Route::get('/tutorial/{id}', [UserController::class, 'show'])->name('tutorial.show');
+Route::prefix('/user')->middleware(['auth'])->group(function () {
+    Route::get('/index', [UserController::class, 'index'])->name('user.index');
+    Route::get('/dashboard', [UserController::class, 'index'])->name('user.dashboard');
+    
+    
+    Route::get('/checkout', [CheckoutController::class, 'showCheckout']);
+    Route::post('/checkout/pay', [CheckoutController::class, 'initiatePayment'])->name('pay');
+    Route::get('/payment/callback', [CheckoutController::class, 'handleCallback']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

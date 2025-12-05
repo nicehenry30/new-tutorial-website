@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tutorial;
+use App\Models\Bot;
+use App\Models\Course;
+use App\Models\Signal;
+use App\Models\Setting;
 
 class UserController extends Controller
 {
@@ -14,7 +17,7 @@ class UserController extends Controller
         $bots = Bot::all();
         $signals = Signal::all();
 
-        return view('dashboard', compact('settings', 'courses', 'bots', 'signals'));
+        return view('user.index', compact('settings', 'courses', 'bots', 'signals'))->with('success', 'Login successful.');;
     }
 
     // Show a single tutorial
