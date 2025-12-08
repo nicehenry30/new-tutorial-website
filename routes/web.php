@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\SubscriptionController;
 
 // Auth routes
 require __DIR__.'/auth.php';
@@ -30,12 +31,16 @@ Route::get('/courses', function () {
 // User routes
 Route::prefix('/user')->middleware(['auth'])->group(function () {
     Route::get('/index', [UserController::class, 'index'])->name('user.index');
-    Route::get('/dashboard', [UserController::class, 'index'])->name('user.dashboard');
+    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
     
     
     Route::get('/checkout', [CheckoutController::class, 'showCheckout']);
     Route::post('/checkout/pay', [CheckoutController::class, 'initiatePayment'])->name('pay');
     Route::get('/payment/callback', [CheckoutController::class, 'handleCallback']);
+
+     Route::post('/subscribe/pay/{signal}', [SubscriptionController::class, 'pay_signal']);
+    Route::get('/subscribe/success', [SubscriptionController::class, 'success'])->name('subscribe.success');
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

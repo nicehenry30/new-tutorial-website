@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('category');
-            $table->integer('product_id');
+            $table->integer('signal_id');
             $table->string('reference')->unique();
-            $table->string('email');
-            $table->integer('amount'); // stored in kobo
+            $table->string('plan');
+            $table->integer('amount'); 
             $table->string('status')->default('pending');
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('subscriptions');
     }
 };

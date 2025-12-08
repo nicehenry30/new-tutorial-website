@@ -79,7 +79,7 @@
     <!-- Mobile nav -->
     <div x-show="mobileNav" @click.away="mobileNav=false" x-transition class="md:hidden bg-white border-t">
       <div class="px-4 py-3 flex flex-col">
-        <a href="#hero" @click="mobileNav=false; navAnimate($event)" class="py-2">Home</a>
+        <a href="{{ route('user.index') }}" @click="mobileNav=false; navAnimate($event)" class="py-2">Home</a>
         <a href="#signals" @click="mobileNav=false; navAnimate($event)" class="py-2">Signals</a>
         <a href="#courses" @click="mobileNav=false; navAnimate($event)" class="py-2">Courses</a>
         <a href="#bots" @click="mobileNav=false; navAnimate($event)" class="py-2">Bots</a>
@@ -136,10 +136,10 @@
               <p class="text-gray-600 mt-2">{{ $signal->description }}</p>
             </div>
             <div class="text-right">
-              <div class="text-indigo-600 font-bold text-lg">Trade Now</div>
+              <div class="text-indigo-600 font-bold text-lg">BUY</div>
               <div class="text-sm text-gray-500 mt-1">TP: {{ $signal->TP }}</div>
               <div class="text-sm text-gray-500">SL: {{ $signal->SL }}</div>
-              <button class="mt-3 px-3 py-1 border rounded text-sm">Subscribe</button>
+              <button @click="openSubscribe({{ json_encode($signal) }})" class="mt-3 px-3 py-1 border rounded text-sm">Subscribe</button>
             </div>
           </div>
         </div>
@@ -374,76 +374,79 @@
   </div>
 
   <!-- Subscribe Drawer -->
-  <div 
+<div 
     x-show="ui.subscribeOpen" 
     x-transition.opacity 
     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-  >
+>
     <div 
-      x-show="ui.subscribeOpen" 
-      x-transition 
-      class="bg-white w-full max-w-md rounded-2xl shadow-xl p-8 relative animate-fade-in"
+        x-show="ui.subscribeOpen" 
+        x-transition 
+        class="bg-white w-full max-w-md rounded-2xl shadow-xl p-8 relative animate-fade-in"
     >
-      <!-- Close button -->
-      <button 
-        @click="ui.subscribeOpen=false" 
-        class="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-      >
-        ✕
-      </button>
-
-      <!-- Title -->
-      <h3 class="text-2xl font-bold text-gray-800 text-center">
-        Subscribe to <span class="text-indigo-600" x-text="ui.subscribingTo?.title"></span>
-      </h3>
-      <p class="text-center text-gray-500 mt-2 text-sm">
-        Choose your preferred subscription plan
-      </p>
-
-      <!-- Pricing Options -->
-      <div class="mt-6 space-y-4">
-        
-        <!-- Monthly Plan -->
-        <div 
-          @click="confirmSubscribe('monthly')" 
-          class="border rounded-xl p-4 flex items-center justify-between cursor-pointer hover:border-indigo-600 transition"
-        >
-          <div>
-            <h4 class="font-semibold text-gray-800">Monthly Plan</h4>
-            <p class="text-gray-500 text-sm">Billed every 30 days</p>
-          </div>
-          <span class="text-indigo-600 font-bold text-lg">$29</span>
-        </div>
-
-        <!-- Yearly Plan -->
-        <div 
-          @click="confirmSubscribe('yearly')" 
-          class="border rounded-xl p-4 flex items-center justify-between cursor-pointer hover:border-indigo-600 transition"
-        >
-          <div>
-            <h4 class="font-semibold text-gray-800">Yearly Plan</h4>
-            <p class="text-gray-500 text-sm">Save 20% — best value</p>
-          </div>
-          <span class="text-indigo-600 font-bold text-lg">$290</span>
-        </div>
-      </div>
-
-      <!-- Info -->
-      <p class="text-center text-xs text-gray-500 mt-6">
-        Payment simulation only (UI demo)
-      </p>
-
-      <!-- Close button bottom -->
-      <div class="mt-4 text-center">
+        <!-- Close button -->
         <button 
-          @click="ui.subscribeOpen=false" 
-          class="px-4 py-2 text-gray-600 hover:text-gray-800 text-sm"
+            @click="ui.subscribeOpen=false" 
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
         >
-          Close
+            ✕
         </button>
-      </div>
+
+        <!-- Title -->
+        <h3 class="text-2xl font-bold text-gray-800 text-center">
+            Subscribe to <span class="text-indigo-600" x-text="ui.subscribingTo?.title"></span>
+        </h3>
+        <p class="text-center text-gray-500 mt-2 text-sm">
+            Choose your preferred subscription plan
+        </p>
+
+        <!-- Pricing Options -->
+        <div class="mt-6 space-y-4">
+            
+            <!-- Monthly Plan -->
+            <form :action="`/user/subscribe/pay/${ui.subscribingTo.id}`" method="POST">
+                @csrf
+                <input type="hidden" name="plan" value="monthly">
+                <button 
+                    type="submit"
+                    class="w-full border rounded-xl p-4 flex items-center justify-between cursor-pointer hover:border-indigo-600 transition"
+                >
+                    <div>
+                        <h4 class="font-semibold text-gray-800">Monthly Plan</h4>
+                        <p class="text-gray-500 text-sm">Billed every 30 days</p>
+                    </div>
+                    <span class="text-indigo-600 font-bold text-lg" x-text="ui.subscribingTo?.monthly_price"></span></span><span>{{ $settings->currency }}</span>
+                </button>
+            </form>
+
+            <!-- Yearly Plan -->
+            <form :action="`/user/subscribe/pay/${ui.subscribingTo.id}`" method="POST">
+                @csrf
+                <input type="hidden" name="plan" value="yearly">
+                <button 
+                    type="submit"
+                    class="w-full border rounded-xl p-4 flex items-center justify-between cursor-pointer hover:border-indigo-600 transition"
+                >
+                    <div>
+                        <h4 class="font-semibold text-gray-800">Yearly Plan</h4>
+                        <p class="text-gray-500 text-sm">Save 20% — best value</p>
+                    </div>
+                    <span class="text-indigo-600 font-bold text-lg" x-text="ui.subscribingTo?.yearly_price"></span><span>{{ $settings->currency }}</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Close button bottom -->
+        <div class="mt-4 text-center">
+            <button 
+                @click="ui.subscribeOpen=false" 
+                class="px-4 py-2 text-gray-600 hover:text-gray-800 text-sm"
+            >
+                Close
+            </button>
+        </div>
     </div>
-  </div>
+</div>
 
   <!-- Course Drawer -->
   <div x-show="ui.courseOpen" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

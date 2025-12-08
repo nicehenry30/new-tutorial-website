@@ -43,10 +43,11 @@ class CheckoutController extends Controller
 
         // Add order in DB
         Order::create([
+            "category" => "course",
             "product_id" => $request->product_id,
             "user_id" => Auth::id(),
             'email' => $request->email,
-            'amount' => $amount,
+            'amount' => $amount / 100,
             'reference' => $reference,
         ]);
 
@@ -69,7 +70,7 @@ class CheckoutController extends Controller
             // UPDATE ORDER AS PAID
             Order::where('reference', $reference)->update(['status' => 'paid']);
 
-            return redirect()->route('user.index')->with('success', 'Payment successful');
+            return redirect()->route('user.dashboard')->with('success', 'Payment successful');
         }
 
         // UPDATE ORDER STATUS

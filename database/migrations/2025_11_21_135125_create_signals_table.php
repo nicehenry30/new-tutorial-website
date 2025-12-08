@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->float('TP')->nullable();
-            $table->float('SL')->nullable();
-            $table->decimal('monthly_price', 8, 5);
-            $table->decimal('yearly_price', 8, 5);
+            $table->decimal('TP', 8, 5)->nullable();
+            $table->decimal('SL', 8, 5)->nullable();
+            $table->decimal('monthly_price', 8, 2);
+            $table->decimal('yearly_price', 8, 2);
             $table->timestamps();
         });
     }
