@@ -39,7 +39,11 @@ Route::prefix('/user')->middleware(['auth'])->group(function () {
     Route::get('/payment/callback', [CheckoutController::class, 'handleCallback']);
 
      Route::post('/subscribe/pay/{signal}', [SubscriptionController::class, 'pay_signal']);
-    Route::get('/subscribe/success', [SubscriptionController::class, 'success'])->name('subscribe.success');
+    Route::get('/subscribe/success', [SubscriptionController::class, 'success_signal'])->name('subscribe.success');
+
+    Route::post('/subscribe/bot/pay/{bot}', [SubscriptionController::class, 'pay_bot']);
+    Route::get('/subscribe/bot/success', [SubscriptionController::class, 'success_bot'])
+    ->name('bots.subscribe.success');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

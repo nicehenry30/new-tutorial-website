@@ -233,7 +233,7 @@
           <h3 class="font-semibold text-xl">{{ $bot->title }}</h3>
           <p class="text-gray-600 mt-2">{{ $bot->description }}</p>
           <div class="mt-4 flex gap-3">
-            <button @click="openSignin()" class="px-4 py-2 bg-indigo-600 text-white rounded">Subscribe</button>
+            <button @click="openBotSubscribe({{ json_encode($bot) }})" class="px-4 py-2 bg-indigo-600 text-white rounded">Subscribe</button>
             <a :href="'{{ $bot->demo_link }}'" target="_blank" class="px-4 py-2 border rounded">Demo</a>
           </div>
         </div> 
@@ -482,6 +482,82 @@
     </div>
   </div>
 
+  <!-- BOT Subscription Modal -->
+<div 
+    x-show="ui.botSubscribeOpen"
+    x-transition.opacity
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+    <div 
+        x-show="ui.botSubscribeOpen" 
+        x-transition 
+        class="bg-white w-full max-w-md rounded-2xl shadow-xl p-8 relative"
+    >
+        <!-- Close -->
+        <button 
+            @click="ui.botSubscribeOpen = false" 
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+            ✕
+        </button>
+
+        <h3 class="text-2xl font-bold text-gray-800 text-center">
+            Subscribe to <span class="text-indigo-600" x-text="ui.subscribingBot?.title"></span>
+        </h3>
+
+        <p class="text-center text-gray-500 mt-2 text-sm">
+            Choose your preferred subscription plan
+        </p>
+
+        <div class="mt-6 space-y-4">
+
+            <!-- Monthly Plan -->
+            <form :action="`user/subscribe/bot/pay/${ui.subscribingBot.id}`" method="POST">
+                @csrf
+                <input type="hidden" name="plan" value="monthly">
+                
+                <button 
+                    type="submit"
+                    class="w-full border rounded-xl p-4 flex items-center justify-between cursor-pointer hover:border-indigo-600 transition"
+                >
+                    <div>
+                        <h4 class="font-semibold text-gray-800">Monthly Plan</h4>
+                        <p class="text-gray-500 text-sm">Billed every 30 days</p>
+                    </div>
+                    <span class="text-indigo-600 font-bold text-lg" x-text="ui.subscribingBot?.monthly_price"></span>
+                </button>
+            </form>
+
+            <!-- Yearly Plan -->
+            <form :action="`user/subscribe/bot/pay/${ui.subscribingBot.id}`" method="POST">
+                @csrf
+                <input type="hidden" name="plan" value="yearly">
+
+                <button 
+                    type="submit"
+                    class="w-full border rounded-xl p-4 flex items-center justify-between cursor-pointer hover:border-indigo-600 transition"
+                >
+                    <div>
+                        <h4 class="font-semibold text-gray-800">Yearly Plan</h4>
+                        <p class="text-gray-500 text-sm">Save 20% — best value</p>
+                    </div>
+                    <span class="text-indigo-600 font-bold text-lg" x-text="ui.subscribingBot?.yearly_price"></span>
+                </button>
+            </form>
+
+        </div>
+
+        <div class="mt-4 text-center">
+            <button 
+                @click="ui.botSubscribeOpen = false" 
+                class="px-4 py-2 text-gray-600 hover:text-gray-800 text-sm">
+                Close
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
   <!-- Alertify JavaScript -->
   <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
 
@@ -490,7 +566,7 @@
       return {
         mobileNav: false,
         signalFilter: 'all',
-        ui: { signinOpen:false, signupOpen:false, subscribeOpen:false, courseOpen:false, subscribingTo:null, activeCourse:null },
+        ui: { signinOpen:false, signupOpen:false, subscribeOpen:false, courseOpen:false, subscribingTo:null, botSubscribeOpen: false, subscribingBot: null, activeCourse:null },
         form:{ name:'', email:'', password:'' },
         subscriptions: [],
         signals: [
@@ -519,6 +595,7 @@
           this.ui.subscribeOpen = false;
           alert('Subscribed ('+plan+'). This is a UI demo.');
         },
+        openBotSubscribe(bot) {this.ui.subscribingBot = bot; this.ui.botSubscribeOpen = true;},
         openCourse(course){ this.ui.activeCourse = course; this.ui.courseOpen = true; },
         playLesson(lesson){ alert('Playing lesson: '+lesson.title+' (demo)') },
         manageSub(sub){ alert('Manage subscription: '+sub.name) },
