@@ -9,6 +9,7 @@ use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use App\Models\Setting;
 
 class SubscriptionController extends Controller
 {
@@ -45,13 +46,22 @@ class SubscriptionController extends Controller
         return back()->with('error', 'Unable to initialize payment. Try again.');
     }
 
+    public function subscription_index()
+    {
+        $subscriptions = Subscription::latest()->get();
+        $settings = Setting::first(); // Fetch site settings
+        return view('admin.subscriptions.index', compact('subscriptions', 'settings'));
+    }
+
+
     public function success_signal(Request $request)
     {
         $reference = $request->query('reference');
 
         // Verify payment
         $response = Http::withToken(env('PAYSTACK_SECRET_KEY'))
-            ->get(env('PAYSTACK_PAYMENT_URL') . '/transaction/verify/{$reference}');
+    ->get(env('PAYSTACK_PAYMENT_URL') . "/transaction/verify/{$reference}");
+
 
         $data = $response->json();
 

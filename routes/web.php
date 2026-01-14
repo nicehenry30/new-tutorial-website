@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\Admin\TicketController;
 
 // Auth routes
 require __DIR__.'/auth.php';
@@ -80,7 +81,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/signals/{id}/delete', [ProductController::class, 'destroy_signal'])->name('admin.signals.delete');
 
 
-    Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('admin.subscriptions');
+    Route::get('/subscriptions', [SubscriptionController::class, 'subscription_index'])->name('admin.subscriptions.index');
     Route::get('/tickets', [TicketController::class, 'index'])->name('admin.tickets');
     Route::get('/profile', [SettingController::class, 'index'])->name('admin.profile');
 

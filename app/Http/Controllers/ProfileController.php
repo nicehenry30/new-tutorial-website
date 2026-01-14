@@ -22,6 +22,11 @@ class ProfileController extends Controller
 
         return redirect()->back()->with('success', 'Profile updated successfully!');
     }
+    public function edit()
+    {
+        $user = Auth::user();
+        return view('admin.profile.edit', compact('user'));
+    }
 
     public function update_password(Request $request)
     {
